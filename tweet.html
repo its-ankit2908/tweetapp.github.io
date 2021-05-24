@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweet App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" 
+    integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+   
+</head>
+<body>
+    <section class="tweet">
+         <div class="container">
+           <div class="box">
+                <div class="logo">
+                <a class="tweet-icon" onclick="goTweet();" >
+                    <!-- <img src="./twitter.png" width="16px" height="16px" alt=""> -->
+                
+                    <i style="font-size: 25px;" class="fab fa-twitter"></i>
+                </a>
+                <h2 class="icon"><i aria-hidden="true" class="fa fa-quote-left"></i></h2>
+                 </div>
+                 <div class="content">
+                <p id="quote"></p>
+                <h3 id="author"></h3>
+                 </div>
+             <a href="#" type="button" class="quoteBtn" onclick="getQuotes();">New Quotes</a>
+            </div>
+         </div>
+          
+         
+
+    </section>
+    <script>
+        const icon  = document.querySelector('.tweet-icon');
+        setInterval(() => {
+            
+            icon.classList.toggle('rotate');
+        }, 3000);
+        
+    </script>
+    <script>
+        const quoteText = document.getElementById('quote');
+        const quoteauthor = document.getElementById('author');
+        const tweetIcon = document.querySelector('.tweet-icon');
+        var quote = "";
+        var goTweet = ()=>{
+          let tweetPost = `https://twitter.com/intent/tweet?text=${quote.text}`;
+          window.open(tweetPost);
+
+        };
+
+
+        var randomQuote = function(len){
+            var num = Math.floor(Math.random()*100);
+            return num;
+        };
+
+        const getQuotes = async ()=>{
+            const api = "https://type.fit/api/quotes";
+        try{
+          let data = await fetch(api); 
+          let realData = await data.json(); 
+          quoteText.innerText = realData[0].text;
+          quoteauthor.innerText = `-By ${realData[0].author}`;
+           quote = realData[randomQuote(realData.length)];
+          quoteText.innerText = quote.text;
+          
+          if(quote.author == ''){
+          quoteauthor.innerText = `-By Someone`;
+              
+          }
+          quoteauthor.innerText = `-By ${quote.author}`;
+          
+        } catch(err){
+           
+        }
+        };
+
+        getQuotes();
+
+    </script>
+</body>
+</html>
